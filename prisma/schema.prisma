@@ -12,7 +12,7 @@ datasource db {
 
 
 model Product {
-  in Int @id @default(autoincrement())
+  id Int @id @default(autoincrement())
   title String
   description String?
   image_url String?
