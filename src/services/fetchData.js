@@ -10,7 +10,7 @@ export const fetchData = async (url) => {
 
 const fetchProductionData = async (url) => {
 	const data = await axios
-		.get(`${process.env.PRODUCTION_APP_URL}${url}`)
+		.get(`https://bb-fe-theta.vercel.app${url}`)
 		.then((res) => res.data)
 	return data
 }
