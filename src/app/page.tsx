@@ -21,7 +21,6 @@ async function loadProducts () {
 export default async function Home() {
 
   const products = await loadProducts()
-
   return (
     <div className='container mx-auto bg-sky-500'>
       <div className='bg-red-100 mb-2 rounded-md'>
@@ -31,7 +30,14 @@ export default async function Home() {
       </div>
       <main className='bg-gray-200 min-h-[calc(100vh-50px)] rounded-md p-2'>
         <Grid templateColumns={['repeat(2, 1fr)', 'repeat(3, 1fr)']} gap={[2,6]}>
-          {products.map((p: Product) =>
+          {products.VERCEL_ENV || "no"}<br/>
+          {products.VERCEL_URL || "no"}<br/>
+          {products.VERCEL_BRANCH_URL || "no"}<br/>
+          {products.NEXT_PUBLIC_VERCEL_ENV || "no"}<br/>
+          {products.NEXT_PUBLIC_VERCEL_URL || "no"}<br/>
+          {products.NEXT_PUBLIC_VERCEL_BRANCH_URL || "no"}<br/>
+          {products.NODE_ENV}<br/>
+          {/* {products.map((p: Product) =>
             <GridItem key={p.id} >
               <Card>
                 <CardHeader p={2}>
@@ -42,10 +48,10 @@ export default async function Home() {
                 </CardBody>
                 {/* <CardFooter p={2}>
                   {p.price}
-                </CardFooter> */}
+                </CardFooter>
               </Card>
             </GridItem>  
-          )}
+          )} */}
         </Grid>
       </main>
     </div>
