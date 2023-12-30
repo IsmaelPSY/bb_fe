@@ -10,7 +10,7 @@ export const fetchData = async (url) => {
 
 const fetchProductionData = async (url) => {
 	const data = await axios
-		.get(`https://${process.env.VERCEL_URL}${url}`)
+		.get(`https://${process.env.NEXT_PUBLIC_VERCEL_URL}${url}`)
 		.then((res) => res.data)
 	return data
 }
