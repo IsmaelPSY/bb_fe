@@ -1,7 +1,7 @@
 import axios from 'axios'
 
 export const fetchData = async (url) => {
-	if (process.env.NEXT_PUBLIC_VERCEL_ENV === 'development') {
+	if (process.env.VERCEL_ENV === 'development') {
 		return await fetchDevelopmentData(url)
   } else {
 		return await fetchProductionData(url)
@@ -10,7 +10,7 @@ export const fetchData = async (url) => {
 
 const fetchProductionData = async (url) => {
 	const data = await axios
-		.get(`${process.env.NEXT_PUBLIC_VERCEL_URL}${url}`)
+		.get(`${process.env.VERCEL_URL}${url}`)
 		.then((res) => res.data)
 	return data
 }
