@@ -17,6 +17,7 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useProducts } from "@/context/ProductContext";
+import CUploadImageInput from "./CUploadImageInput";
 
 interface Product {
   id?: number
@@ -79,7 +80,6 @@ export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOp
       createProduct(transformToProduct(values))
       setIsOpen(false)
     }
-
   }
 
   return(
@@ -119,6 +119,27 @@ export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOp
               <FormLabel>Precio</FormLabel>
               <FormControl>
                 <Input placeholder="Precio" type="number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="image_urls"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Imagenes</FormLabel>
+              <FormControl>
+                <CUploadImageInput 
+                	value={field.value.map((image) => image)}
+                  onChange={(url) => field.onChange([...field.value, url])}
+                  onRemove={(url) =>
+                    field.onChange([
+                      ...field.value.filter((current) => current !== url),
+                    ])
+                  }
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
