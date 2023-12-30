@@ -1,3 +1,4 @@
+import { ProductProvider } from "@/context/ProductContext"
 import { Heading, Link as ChakraLink } from "@chakra-ui/react"
 import Link from "next/link"
 
@@ -17,7 +18,9 @@ export default function AdminLayout({
         </ul>
       </nav>
       <div className="">
-        {children}
+        <ProductProvider>
+          {children}
+        </ProductProvider>
       </div>
     </>
   )

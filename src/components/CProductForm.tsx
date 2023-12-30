@@ -16,6 +16,7 @@ import {
   FormMessage,
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useProducts } from "@/context/ProductContext";
 
 const formSchema = z.object({
   title: z.string().min(1, {
@@ -24,29 +25,33 @@ const formSchema = z.object({
   description: z.string().min(1, {
     message: "Insertar una descripcion",
   }),
+  price: z.coerce.number(),
+  available: z.boolean()
 })
 
-export default function CProductForm ({setIsOpen}: {setIsOpen: (isOpen: boolean) => void}) {
+export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOpen: boolean) => void, initalData?: any}) {
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
-    defaultValues: {
+    defaultValues: initalData || {
       title: "",
-      description: ""
+      description: "",
+      price: 0,
+      available: true
     },
   })
 
-  // 2. Define a submit handler.
+  const {createProduct, updateProduct} = useProducts();
+
   function onSubmit(values: z.infer<typeof formSchema>) {
-    axios.post('/api/products', values)
-    .then((response: Response) => {
-      console.log(response);
-      setIsOpen(false);
-    })
-    .catch((error: Error) => {
-      console.log(error);
-      setIsOpen(false);
-    });
-    
+    if (initalData){
+      updateProduct(initalData.id, values)
+      setIsOpen(false)
+    } else {
+      createProduct(values)
+      setIsOpen(false)
+    }
+
   }
 
   return(
@@ -78,9 +83,26 @@ export default function CProductForm ({setIsOpen}: {setIsOpen: (isOpen: boolean)
             </FormItem>
           )}
         />
+        <FormField
+          control={form.control}
+          name="price"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Precio</FormLabel>
+              <FormControl>
+                <Input placeholder="Precio" type="number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <div className="flex justify-end">
-          <Button type="submit" className="mr-2">Guardar</Button>
-          <Button variant="secondary">Cancelar</Button>
+          <Button type="submit" className="mr-2">
+            {
+              initalData ? "Editar" : "Crear"
+            }
+          </Button>
+          <Button type="button" variant="secondary" onClick={()=> setIsOpen(false)}>Cancelar</Button>
         </div>
       </form>
     </Form>
