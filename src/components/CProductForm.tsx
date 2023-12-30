@@ -18,6 +18,19 @@ import {
 import { Input } from "@/components/ui/input"
 import { useProducts } from "@/context/ProductContext";
 
+interface Product {
+  id?: number
+  title: string
+  description: string
+  image_urls: string[]
+  tags: string[]
+  price: number
+  available: boolean
+  createdAt?: Date
+  updatedAt?: Date
+}
+
+
 const formSchema = z.object({
   title: z.string().min(1, {
     message: "Insertar un titulo",
@@ -25,9 +38,22 @@ const formSchema = z.object({
   description: z.string().min(1, {
     message: "Insertar una descripcion",
   }),
+  image_urls: z.array(z.string()),
+  tags: z.array(z.string()),
   price: z.coerce.number(),
   available: z.boolean()
 })
+
+const transformToProduct = (values: z.infer<typeof formSchema>): Product => {
+  return {
+    title: values.title,
+    description: values.description,
+    image_urls: values.image_urls,
+    tags: values.tags,
+    price: values.price,
+    available: values.available
+  }
+}
 
 export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOpen: boolean) => void, initalData?: any}) {
 
@@ -36,6 +62,8 @@ export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOp
     defaultValues: initalData || {
       title: "",
       description: "",
+      image_urls: [],
+      tags: [],
       price: 0,
       available: true
     },
@@ -45,10 +73,10 @@ export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOp
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     if (initalData){
-      updateProduct(initalData.id, values)
+      updateProduct(initalData.id, transformToProduct(values))
       setIsOpen(false)
     } else {
-      createProduct(values)
+      createProduct(transformToProduct(values))
       setIsOpen(false)
     }
 

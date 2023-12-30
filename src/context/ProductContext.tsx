@@ -4,14 +4,15 @@ import axios from "axios";
 import React, { createContext, useContext, useState } from "react";
 
 interface Product {
-  id: number
+  id?: number
   title: string
   description: string
-  image_url: string
+  image_urls: string[]
+  tags: string[]
   price: number
   available: boolean
-  createdAt: Date
-  updatedAt: Date
+  createdAt?: Date
+  updatedAt?: Date
 }
 
 export const ProductContext = createContext<{
