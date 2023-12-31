@@ -13,14 +13,14 @@ interface Product {
   updatedAt: Date
 }
 
-async function loadProducts () {
-  const products = await fetchData("/api/products")
-  return products;
-}
+// async function loadProducts () {
+//   const products = await fetchData("/api/products")
+//   return products;
+// }
 
 export default async function Home() {
 
-  const products = await loadProducts()
+  // const products = await loadProducts()
   return (
     <div className='container mx-auto bg-sky-500'>
       <div className='bg-red-100 mb-2 rounded-md'>
@@ -29,7 +29,7 @@ export default async function Home() {
         </Heading>
       </div>
       <main className='bg-gray-200 min-h-[calc(100vh-50px)] rounded-md p-2'>
-        <Grid templateColumns={['repeat(2, 1fr)', 'repeat(3, 1fr)']} gap={[2,6]}>
+        {/* <Grid templateColumns={['repeat(2, 1fr)', 'repeat(3, 1fr)']} gap={[2,6]}>
           {products.map((p: Product) =>
             <GridItem key={p.id} >
               <Card>
@@ -39,13 +39,13 @@ export default async function Home() {
                 <CardBody p={2}>
                   <Image src={p.image_urls[0]} alt={p.title} />
                 </CardBody>
-                {/* <CardFooter p={2}>
+                <CardFooter p={2}>
                   {p.price}
-                </CardFooter> */}
+                </CardFooter>
               </Card>
             </GridItem>  
           )}
-        </Grid>
+        </Grid> */}
       </main>
     </div>
 
