@@ -48,6 +48,7 @@ export const ProductProvider = ({children} : {children: React.ReactNode}) => {
 
   const createProduct = async (values: Product) => {
     const res = await axios.post('/api/products', values)
+    axios.get("/api/revalidate?path=/")
     setProducts([...products, res.data])
   }
 

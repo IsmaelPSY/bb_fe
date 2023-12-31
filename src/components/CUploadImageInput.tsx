@@ -27,10 +27,8 @@ export default function CUploadImageInput ({ onChange, onRemove, value }: {onCha
       }
   
       const res =  await axios.post("/api/upload", formData)
-      console.log({res})
       onChange(res.data.image_url)
     }catch (error){
-      console.error(error)
     } finally {
       setLoading(false)
     }
