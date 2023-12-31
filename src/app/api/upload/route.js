@@ -4,7 +4,8 @@ import {v2 as cloudinary} from 'cloudinary';
 cloudinary.config({ 
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME, 
   api_key: process.env.CLOUDINARY_API_KEY, 
-  api_secret: process.env.CLOUDINARY_API_SECRET
+  api_secret: process.env.CLOUDINARY_API_SECRET,
+  secure: true
 });
 
 
@@ -15,14 +16,24 @@ export async function POST(request) {
 
     if(!image) return NextResponse.json("no se ha subido ninguna imagen", {status: 400})
 
-    const bytes = await image.arrayBuffer()
-    const buffer = Buffer.from(bytes)
+    const fileBuffer = await image.arrayBuffer()
+
+    const mime = image.type; 
+    const encoding = 'base64'; 
+    const base64Data = Buffer.from(fileBuffer).toString('base64');
+    const fileUri = 'data:' + mime + ';' + encoding + ',' + base64Data;
 
     const response = await new Promise((resolve, reject) => {
-      cloudinary.uploader.upload_stream({}, (error, result) => {
-        if(error) reject(error)
-        resolve(result)
-      }).end(buffer)
+      cloudinary.uploader.upload(fileUri, {
+        folder: "products",
+        invalidate: true
+      })
+        .then((result) => {
+          resolve(result);
+        })
+        .catch((error) => {
+          reject(error);
+        });
     })
 
     return NextResponse.json({
