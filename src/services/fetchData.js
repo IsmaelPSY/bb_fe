@@ -1,12 +1,11 @@
 import axios from 'axios'
 
 export const fetchData = async (url) => {
-	console.log(process.env.PRODUCTION_APP_URL)
-	// if (process.env.VERCEL_ENV === 'development') {
-	// 	return await fetchDevelopmentData(url)
-  // } else {
-	// 	return await fetchProductionData(url)
-	// }
+	if (process.env.VERCEL_ENV === 'development') {
+		return await fetchDevelopmentData(url)
+  } else {
+		return await fetchProductionData(url)
+	}
 }
 
 const fetchProductionData = async (url) => {
