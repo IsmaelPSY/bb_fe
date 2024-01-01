@@ -48,17 +48,19 @@ export const ProductProvider = ({children} : {children: React.ReactNode}) => {
 
   const createProduct = async (values: Product) => {
     const res = await axios.post('/api/products', values)
-    axios.get("/api/revalidate?path=/")
+    axios.get("/api/revalidate?path=/home")
     setProducts([...products, res.data])
   }
 
   const deleteProduct = async (id: number) => {
     await axios.delete(`/api/products/${id}`)
+    axios.get("/api/revalidate?path=/home")
     setProducts(products.filter(product => product.id !== id))
   }
 
   const updateProduct = async (id: number, values: Product) => {
     const res = await axios.put(`/api/products/${id}`, values)
+    axios.get("/api/revalidate?path=/home")
     setProducts(products.map(product => product.id === id ? res.data : product))
   }
 
