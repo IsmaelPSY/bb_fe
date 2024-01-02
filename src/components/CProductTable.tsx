@@ -13,7 +13,7 @@ interface Product {
 }
 
 import { useProducts } from "@/context/ProductContext"
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Button, ButtonGroup, Table, TableContainer, Tbody, Td, Th, Thead, Tr, Tag, TagLabel } from "@chakra-ui/react";
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Button, ButtonGroup, Table, TableContainer, Tbody, Td, Th, Thead, Tr, Tag, TagLabel, useToast, Popover, PopoverTrigger, Portal, PopoverContent, PopoverArrow, PopoverBody, Text } from "@chakra-ui/react";
 import { useEffect, useState } from "react"
 import CProductForm from "./CProductForm"
 
@@ -21,6 +21,7 @@ import CProductForm from "./CProductForm"
 export default function CProductTable () {
 
   const { products, loadProducts, deleteProduct } = useProducts()
+  const toast = useToast()
 
   const [isOpen, setIsOpen] = useState(false);
   const [productToUpdate, setProductToUpdate] = useState(null);
@@ -29,11 +30,29 @@ export default function CProductTable () {
     loadProducts()
   }, [])
 
-
   const handleUpdateProduct = (id: number) => {
     const product = products.find(product => product.id === id)
     setProductToUpdate(product)
     setIsOpen(true)
+  }
+
+  const handleDeleteProduct = (id: number) => {
+    try{
+      deleteProduct(id)
+      toast({
+        title: 'Etiqueta eliminada',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      })
+    } catch (error) {
+      toast({
+        title: 'Error al eliminar la etiqueta',
+        status:'error',
+        duration: 2000,
+        isClosable: true,
+      })
+    }
   }
 
   return(
@@ -72,7 +91,20 @@ export default function CProductTable () {
               <Td>
                 <ButtonGroup gap="2">
                   <Button size='sm' colorScheme="blue" onClick={() => handleUpdateProduct(p.id)}>Editar</Button>
-                  <Button size='sm' colorScheme="red" onClick={()=> deleteProduct(p.id)}>Eliminar</Button>
+                  <Popover>
+                    <PopoverTrigger>
+                      <Button size='sm' colorScheme="red">Eliminar</Button>
+                    </PopoverTrigger>
+                    <Portal>
+                      <PopoverContent w="105px">
+                        <PopoverArrow />
+                        <PopoverBody>
+                          <Text fontSize="sm">Confirmar Eliminación</Text>
+                          <Button size='sm' colorScheme="red" onClick={()=> handleDeleteProduct(p.id)}>Eliminar</Button>
+                        </PopoverBody>
+                      </PopoverContent>
+                    </Portal>
+                  </Popover>
                 </ButtonGroup>
               </Td>
             </Tr>)}

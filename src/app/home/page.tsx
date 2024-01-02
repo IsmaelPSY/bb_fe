@@ -1,6 +1,6 @@
-import { Card, CardBody, CardFooter, CardHeader, Grid, GridItem, Heading, Image, Link as ChakraLink } from '@chakra-ui/react'
-import { fetchData } from '@/services/fetchData'
-import Link from "next/link"
+import { Grid, GridItem } from '@chakra-ui/react'
+import { getAllProducts } from '@/services/fetchData'
+import CProductCard from '@/components/CProductCard'
 
 interface Product {
   id: number
@@ -15,7 +15,7 @@ interface Product {
 }
 
 async function loadProducts () {
-  const products = await fetchData("/api/products")
+  const products = await getAllProducts()
   return products;
 }
 
@@ -26,20 +26,8 @@ export default async function Home() {
   return (
     <Grid templateColumns={['repeat(2, 1fr)', 'repeat(3, 1fr)']} gap={[2,6]}>
       {products.map((p: Product) =>
-        <GridItem key={p.id} >
-            <ChakraLink as={Link} href={`/home/product/${p.id}`}>
-              <Card>
-                <CardHeader p={2}>
-                  <Heading size='xs' className=''>{p.title}</Heading>
-                </CardHeader>
-                <CardBody p={2}>
-                  <Image src={p.image_urls[0]} alt={p.title} />
-                </CardBody>
-                {/* <CardFooter p={2}>
-                  {p.price}
-                </CardFooter> */}
-              </Card>
-            </ChakraLink>
+        <GridItem key={p.id}>
+          <CProductCard product={p} />
         </GridItem>  
       )}
     </Grid>

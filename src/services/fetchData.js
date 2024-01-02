@@ -1,23 +1,14 @@
 import axios from 'axios'
 
-export const fetchData = async (url) => {
-	if (process.env.VERCEL_ENV === 'development') {
-		return await fetchDevelopmentData(url)
-  } else {
-		return await fetchProductionData(url)
-	}
+const axiosInstance = axios.create({
+	baseURL: process.env.BASE_URL
+})
+
+
+export const getAllProducts = async () => {
+	return (await axiosInstance.get('/api/products')).data
 }
 
-const fetchProductionData = async (url) => {
-	const data = await axios
-		.get(`https://${process.env.PRODUCTION_APP_URL}${url}`)
-		.then((res) => res.data)
-	return data
-}
-
-const fetchDevelopmentData = async (url) => {
-	const data = await axios
-		.get(`http://localhost:3000${url}`)
-		.then((res) => res.data)
-	return data
+export const getProductById = async (id) => {
+	return (await axiosInstance.get(`/api/products/${id}`)).data
 }

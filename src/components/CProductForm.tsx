@@ -18,6 +18,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { useProducts } from "@/context/ProductContext";
 import CUploadImageInput from "./CUploadImageInput";
+import { useToast } from "@chakra-ui/react";
 
 interface Product {
   id?: number
@@ -71,14 +72,39 @@ export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOp
   })
 
   const {createProduct, updateProduct} = useProducts();
+  const toast = useToast()
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    if (initalData){
-      updateProduct(initalData.id, transformToProduct(values))
-      setIsOpen(false)
-    } else {
-      createProduct(transformToProduct(values))
-      setIsOpen(false)
+    try{
+      if (initalData){
+        updateProduct(initalData.id, transformToProduct(values))
+        toast({
+          title: 'Producto actualizado',
+          description: "El producto ha sido actualizado correctamente",
+          status: 'success',
+          duration: 3000,
+          isClosable: true,
+        })
+        setIsOpen(false)
+      } else {
+        createProduct(transformToProduct(values))
+        toast({
+          title: 'Producto creado',
+          description: "El producto ha sido creado correctamente",
+          status:'success',
+          duration: 3000,
+          isClosable: true,
+        })
+        setIsOpen(false)
+      }
+    }catch (error){
+      toast({
+        title: 'Error',
+        description: "Ha ocurrido un error",
+        status:'error',
+        duration: 2000,
+        isClosable: true,
+      })
     }
   }
 

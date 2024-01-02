@@ -1,4 +1,5 @@
 import { ProductProvider } from "@/context/ProductContext"
+import { TagProvider } from "@/context/TagContext"
 import { Heading, Link as ChakraLink } from "@chakra-ui/react"
 import Link from "next/link"
 
@@ -11,15 +12,20 @@ export default function AdminLayout({
     <>
       <nav className="bg-sky-500 flex p-2 justify-between items-center">
         <Heading size='lg'>Panel de Administrador</Heading>
-        <ul className="bg-sky-300 rounded-lg px-2 py-1">
-          <li>
+        <ul className="flex">
+          <li className="bg-sky-300 rounded-lg px-2 py-1 mr-1">
             <ChakraLink as={Link} href="/admin/products">Productos</ChakraLink>
+          </li>
+          <li className="bg-sky-300 rounded-lg px-2 py-1">
+            <ChakraLink as={Link} href="/admin/tags">Etiquetas</ChakraLink>
           </li>
         </ul>
       </nav>
       <div className="">
         <ProductProvider>
-          {children}
+          <TagProvider>
+            {children}
+          </TagProvider>
         </ProductProvider>
       </div>
     </>
