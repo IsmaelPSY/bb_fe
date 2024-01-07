@@ -14,20 +14,14 @@ datasource db {
 
 model Product {
   id Int @id @default(autoincrement())
-  title String
-  description String?
-  image_urls String[]
-  tags String[]
-  price Int 
+  title String @db.VarChar(100)
+  description String? @db.VarChar(250)
+  image_urls String[] @db.VarChar(150)
+  category String? @db.VarChar(15)
+  size Int? @db.SmallInt
+  gender String? @db.Char(1)
+  price Int @db.SmallInt
   available Boolean  @default(true)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-}
-
-model Tag {
-  id Int @id @default(autoincrement())
-  title String
-  color String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }

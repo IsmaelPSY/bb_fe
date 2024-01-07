@@ -1,32 +1,22 @@
 "use client"
 
+import { INewProduct, IProduct } from "@/interfaces/IProduct";
 import axios from "axios";
 import React, { createContext, useContext, useState } from "react";
 
-interface Product {
-  id?: number
-  title: string
-  description: string
-  image_urls: string[]
-  tags: string[]
-  price: number
-  available: boolean
-  createdAt?: Date
-  updatedAt?: Date
-}
 
 export const ProductContext = createContext<{
   products: any[];
   loadProducts: () => Promise<void>;
-  createProduct: (product: Product) => Promise<void>;
+  createProduct: (product: INewProduct) => Promise<void>;
   deleteProduct: (id: number) => Promise<void>;
-  updateProduct: (id:number, product: Product) => Promise<void>;
+  updateProduct: (id:number, product: INewProduct) => Promise<void>;
 }>({
   products: [],
   loadProducts: async () => {},
-  createProduct: async (product: Product) => {},
+  createProduct: async (product: INewProduct) => {},
   deleteProduct: async (id: number) => {},
-  updateProduct: async (id:number, product: Product) => {}
+  updateProduct: async (id:number, product: INewProduct) => {}
 })
 
 export const useProducts = () => {
@@ -39,14 +29,14 @@ export const useProducts = () => {
 
 export const ProductProvider = ({children} : {children: React.ReactNode}) => {
 
-  const [products, setProducts] = useState<Product[]>([])
+  const [products, setProducts] = useState<IProduct[]>([])
 
   const loadProducts = async () => {
     const res = await axios.get("/api/products")
     setProducts(res.data)
   }
 
-  const createProduct = async (values: Product) => {
+  const createProduct = async (values: INewProduct) => {
     const res = await axios.post('/api/products', values)
     axios.get("/api/revalidate")
     setProducts([...products, res.data])
@@ -58,7 +48,7 @@ export const ProductProvider = ({children} : {children: React.ReactNode}) => {
     setProducts(products.filter(product => product.id !== id))
   }
 
-  const updateProduct = async (id: number, values: Product) => {
+  const updateProduct = async (id: number, values: INewProduct) => {
     const res = await axios.put(`/api/products/${id}`, values)
     axios.get("/api/revalidate")
     setProducts(products.map(product => product.id === id ? res.data : product))

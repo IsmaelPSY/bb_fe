@@ -18,40 +18,60 @@ import {
 import { Input } from "@/components/ui/input"
 import { useProducts } from "@/context/ProductContext";
 import CUploadImageInput from "./CUploadImageInput";
-import { useToast } from "@chakra-ui/react";
+import { Box, Select, useToast } from "@chakra-ui/react";
 
-interface Product {
-  id?: number
-  title: string
-  description: string
-  image_urls: string[]
-  tags: string[]
-  price: number
-  available: boolean
-  createdAt?: Date
-  updatedAt?: Date
-}
+import { ENewProductCategory, ENewProductGender, INewProduct } from "@/interfaces/IProduct";
 
 
 const formSchema = z.object({
   title: z.string().min(1, {
-    message: "Insertar un titulo",
-  }),
+    message: "Insertar un titulo menor a 100 caracteres",
+  }).max(100),
   description: z.string().min(1, {
     message: "Insertar una descripcion",
+  }).max(250, {
+    message: "Insertar una descripcion menor a 250 caracteres",
   }),
   image_urls: z.array(z.string()),
-  tags: z.array(z.string()),
+  category: z.enum(["s", "c", "a"]),
+  size: z.coerce.number(),
+  gender: z.enum(["b", "g"]),
   price: z.coerce.number(),
   available: z.boolean()
 })
 
-const transformToProduct = (values: z.infer<typeof formSchema>): Product => {
+const transformToProductGender = (gender: string): ENewProductGender => {
+  switch (gender) {
+    case 'b':
+      return ENewProductGender.BOY;
+    case 'g':
+      return ENewProductGender.GIRL;
+    default:
+      throw new Error(`Invalid gender value: ${gender}`);
+  }
+}
+
+const transformToProductCategory = (category: string): ENewProductCategory => {
+  switch (category){
+    case 's':
+      return ENewProductCategory.SHOES;
+    case 'c':
+      return ENewProductCategory.CLOTHES;
+    case 'a':
+      return ENewProductCategory.ACCESSORIES;
+    default:
+      throw new Error(`Invalid category value: ${category}`);
+  }
+}
+
+const transformToProduct = (values: z.infer<typeof formSchema>): INewProduct => {
   return {
     title: values.title,
     description: values.description,
     image_urls: values.image_urls,
-    tags: values.tags,
+    category: transformToProductCategory(values.category),
+    size: values.size,
+    gender: transformToProductGender(values.gender),
     price: values.price,
     available: values.available
   }
@@ -66,13 +86,18 @@ export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOp
       description: "",
       image_urls: [],
       tags: [],
+      category: "c",
+      size: 0,
+      gender: "b",
       price: 0,
       available: true
     },
   })
 
-  const {createProduct, updateProduct} = useProducts();
   const toast = useToast()
+
+  const {createProduct, updateProduct} = useProducts();
+
 
   function onSubmit(values: z.infer<typeof formSchema>) {
     try{
@@ -145,6 +170,58 @@ export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOp
               <FormLabel>Precio</FormLabel>
               <FormControl>
                 <Input placeholder="Precio" type="number" {...field} />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="gender"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Género</FormLabel>
+              <FormControl>
+                <Select>
+                  <option value="b">Niño</option>
+                  <option value="g">Niña</option>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="size"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Talla</FormLabel>
+              <FormControl>
+                <Select>
+                  <option value="0">0</option>
+                  <option value="2">2</option>
+                  <option value="4">4</option>
+                  <option value="6">6</option>
+                  <option value="8">8</option>
+                </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="category"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Categoria</FormLabel>
+              <FormControl>
+                <Select>
+                  <option value="c">Ropa</option>
+                  <option value="s">Zapatos</option>
+                  <option value="a">Accesorios</option>
+                </Select>
               </FormControl>
               <FormMessage />
             </FormItem>

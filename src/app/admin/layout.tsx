@@ -1,7 +1,11 @@
 import { ProductProvider } from "@/context/ProductContext"
-import { TagProvider } from "@/context/TagContext"
 import { Heading, Link as ChakraLink } from "@chakra-ui/react"
+import { Metadata } from "next"
 import Link from "next/link"
+
+export const metadata: Metadata = {
+  title: "Boutique Belen | Admin"
+}
 
 export default function AdminLayout({
   children, // will be a page or nested layout
@@ -16,16 +20,11 @@ export default function AdminLayout({
           <li className="bg-sky-300 rounded-lg px-2 py-1 mr-1">
             <ChakraLink as={Link} href="/admin/products">Productos</ChakraLink>
           </li>
-          <li className="bg-sky-300 rounded-lg px-2 py-1">
-            <ChakraLink as={Link} href="/admin/tags">Etiquetas</ChakraLink>
-          </li>
         </ul>
       </nav>
       <div className="">
         <ProductProvider>
-          <TagProvider>
             {children}
-          </TagProvider>
         </ProductProvider>
       </div>
     </>
