@@ -24,7 +24,7 @@ export default async function Home() {
   const products = await loadProducts()
   
   return (
-    <Grid templateColumns={['repeat(2, 1fr)', 'repeat(4, 1fr)']} gap={[2,6]}>
+    <Grid templateColumns={['repeat(2, 1fr)', 'repeat(3, 1fr)', 'repeat(4, 1fr)']} gap={[2,6]}>
       {products.map((p: Product) =>
         <GridItem key={p.id}>
           <CProductCard product={p} />
