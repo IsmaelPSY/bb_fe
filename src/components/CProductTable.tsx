@@ -13,10 +13,11 @@ interface Product {
 }
 
 import { useProducts } from "@/context/ProductContext"
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Button, ButtonGroup, Table, TableContainer, Tbody, Td, Th, Thead, Tr, Tag, TagLabel, useToast, Popover, PopoverTrigger, Portal, PopoverContent, PopoverArrow, PopoverBody, Text } from "@chakra-ui/react";
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Button, ButtonGroup, Table, TableContainer, Tbody, Td, Th, Thead, Tr, Tag, TagLabel, useToast, Popover, PopoverTrigger, Portal, PopoverContent, PopoverArrow, PopoverBody, Text, HStack } from "@chakra-ui/react";
 import { useEffect, useState } from "react"
 import CProductForm from "./CProductForm"
-
+import { IProduct } from "@/interfaces/IProduct"
+import CProductTag from "./CProductTag"
 
 export default function CProductTable () {
 
@@ -71,23 +72,44 @@ export default function CProductTable () {
           <Thead>
             <Tr>
               <Th>Nombre</Th>
-              <Th>Disponible</Th>
-              <Th>Etiquetas</Th>
+              <Th>Descripcion</Th>
+              <Th>Caracteristicas</Th>
               <Th isNumeric>Precio</Th>
+              <Th>Disponible</Th>
               <Th className="w-40"></Th>
             </Tr>
           </Thead>
           <Tbody>
-            {products.map((p) => <Tr key={p.id}>
+            {products.map((p: IProduct) => <Tr key={p.id}>
               <Td>{p.title}</Td>
+
+              <Td>{p.description}</Td>
+              <Td>
+                <HStack>
+                  {
+                    Number.isInteger(p.size)
+                    ? <CProductTag value={p.size} type="size"/>
+                    : null
+                  }
+                  {
+                    p.gender
+                   ? <CProductTag value={p.gender} type="gender"/>
+                    : null
+                  }
+                  {
+                    p.category
+                  ? <CProductTag value={p.category} type="category"/>
+                    : null
+                  }
+                </HStack>
+              </Td>
+              <Td isNumeric>S/{p.price}</Td>
               <Td>
                 {p.available 
                 ? <Tag colorScheme="green"><TagLabel>Disponible</TagLabel></Tag> 
                 : <Tag colorScheme="red"><TagLabel>No Disponible</TagLabel></Tag> 
                 }
               </Td>
-              <Td></Td>
-              <Td isNumeric>S/{p.price}</Td>
               <Td>
                 <ButtonGroup gap="2">
                   <Button size='sm' colorScheme="blue" onClick={() => handleUpdateProduct(p.id)}>Editar</Button>

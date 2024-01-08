@@ -100,6 +100,7 @@ export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOp
 
 
   function onSubmit(values: z.infer<typeof formSchema>) {
+    console.log({values})
     try{
       if (initalData){
         updateProduct(initalData.id, transformToProduct(values))
@@ -182,7 +183,10 @@ export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOp
             <FormItem>
               <FormLabel>Género</FormLabel>
               <FormControl>
-                <Select>
+                <Select 
+                  value={field.value}
+                  onChange={(e) => field.onChange(e.target.value)}
+                >
                   <option value="b">Niño</option>
                   <option value="g">Niña</option>
                 </Select>
@@ -198,7 +202,10 @@ export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOp
             <FormItem>
               <FormLabel>Talla</FormLabel>
               <FormControl>
-                <Select>
+                <Select 
+                  value={field.value}
+                  onChange={(e) => field.onChange(e.target.value)}
+                >
                   <option value="0">0</option>
                   <option value="2">2</option>
                   <option value="4">4</option>
@@ -217,7 +224,10 @@ export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOp
             <FormItem>
               <FormLabel>Categoria</FormLabel>
               <FormControl>
-                <Select>
+                <Select 
+                  value={field.value}
+                  onChange={(e) => field.onChange(e.target.value)} 
+                >
                   <option value="c">Ropa</option>
                   <option value="s">Zapatos</option>
                   <option value="a">Accesorios</option>
