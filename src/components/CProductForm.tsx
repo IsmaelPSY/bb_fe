@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { useProducts } from "@/context/ProductContext";
 import CUploadImageInput from "./CUploadImageInput";
-import { Box, Flex, Select, Switch, Tag, TagLabel, useToast } from "@chakra-ui/react";
+import { Box, Flex, Radio, RadioGroup, Select, Stack, Switch, Tag, TagLabel, useToast } from "@chakra-ui/react";
 
 import { ENewProductCategory, ENewProductGender, INewProduct } from "@/interfaces/IProduct";
 
@@ -182,13 +182,15 @@ export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOp
             <FormItem>
               <FormLabel>Género</FormLabel>
               <FormControl>
-                <Select 
+                <RadioGroup 
                   value={field.value}
-                  onChange={(e) => field.onChange(e.target.value)}
+                  onChange={(e) => field.onChange(e)}
                 >
-                  <option value="b">Niño</option>
-                  <option value="g">Niña</option>
-                </Select>
+                  <Stack direction='row'>
+                    <Radio value="b">Niño</Radio>
+                    <Radio value="g">Niña</Radio>
+                  </Stack>
+                </RadioGroup>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -223,14 +225,16 @@ export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOp
             <FormItem>
               <FormLabel>Categoria</FormLabel>
               <FormControl>
-                <Select 
+                <RadioGroup 
                   value={field.value}
-                  onChange={(e) => field.onChange(e.target.value)} 
+                  onChange={(e) => field.onChange(e)} 
                 >
-                  <option value="c">Ropa</option>
-                  <option value="s">Zapatos</option>
-                  <option value="a">Accesorios</option>
-                </Select>
+                  <Stack direction='row'>
+                    <Radio value="c">Ropa</Radio>
+                    <Radio value="s">Zapatos</Radio>
+                    <Radio value="a">Accesorios</Radio>
+                  </Stack>
+                </RadioGroup>
               </FormControl>
               <FormMessage />
             </FormItem>
