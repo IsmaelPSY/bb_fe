@@ -13,11 +13,12 @@ interface Product {
 }
 
 import { useProducts } from "@/context/ProductContext"
-import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Button, ButtonGroup, Table, TableContainer, Tbody, Td, Th, Thead, Tr, Tag, TagLabel, useToast, Popover, PopoverTrigger, Portal, PopoverContent, PopoverArrow, PopoverBody, Text, HStack } from "@chakra-ui/react";
+import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Button, ButtonGroup, Table, TableContainer, Tbody, Td, Th, Thead, Tr, Tag, TagLabel, useToast, Popover, PopoverTrigger, Portal, PopoverContent, PopoverArrow, PopoverBody, Text, HStack, TagLeftIcon } from "@chakra-ui/react";
 import { useEffect, useState } from "react"
 import CProductForm from "./CProductForm"
 import { IProduct } from "@/interfaces/IProduct"
 import CProductTag from "./CProductTag"
+import { CheckCircleIcon, LockIcon } from "@chakra-ui/icons"
 
 export default function CProductTable () {
 
@@ -106,8 +107,8 @@ export default function CProductTable () {
               <Td isNumeric>S/{p.price}</Td>
               <Td>
                 {p.available 
-                ? <Tag colorScheme="green"><TagLabel>Disponible</TagLabel></Tag> 
-                : <Tag colorScheme="red"><TagLabel>No Disponible</TagLabel></Tag> 
+                ? <Tag colorScheme="green"><TagLabel><TagLeftIcon as={CheckCircleIcon}/>Disponible</TagLabel></Tag> 
+                : <Tag colorScheme="red"><TagLabel><TagLeftIcon as={LockIcon}/>No Disponible</TagLabel></Tag> 
                 }
               </Td>
               <Td>

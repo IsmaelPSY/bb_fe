@@ -18,7 +18,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { useProducts } from "@/context/ProductContext";
 import CUploadImageInput from "./CUploadImageInput";
-import { Box, Select, useToast } from "@chakra-ui/react";
+import { Box, Flex, Select, Switch, Tag, TagLabel, useToast } from "@chakra-ui/react";
 
 import { ENewProductCategory, ENewProductGender, INewProduct } from "@/interfaces/IProduct";
 
@@ -37,7 +37,7 @@ const formSchema = z.object({
   size: z.coerce.number(),
   gender: z.enum(["b", "g"]),
   price: z.coerce.number(),
-  available: z.boolean()
+  available: z.coerce.boolean()
 })
 
 const transformToProductGender = (gender: string): ENewProductGender => {
@@ -100,7 +100,6 @@ export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOp
 
 
   function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log({values})
     try{
       if (initalData){
         updateProduct(initalData.id, transformToProduct(values))
@@ -232,6 +231,31 @@ export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOp
                   <option value="s">Zapatos</option>
                   <option value="a">Accesorios</option>
                 </Select>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="available"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Disponible:</FormLabel>
+              <FormControl>
+                <Flex justifyContent="space-between">
+                  {
+                    field.value 
+                    ? <Tag colorScheme="green"><TagLabel>Disponible</TagLabel></Tag> 
+                    : <Tag colorScheme="red"><TagLabel>No Disponible</TagLabel></Tag> 
+                  }
+                  <Switch 
+                    size="lg" 
+                    colorScheme="green"
+                    isChecked={field.value} 
+                    onChange={(e) => field.onChange(e.target.checked)} 
+                  />
+                </Flex>
               </FormControl>
               <FormMessage />
             </FormItem>
