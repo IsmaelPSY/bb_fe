@@ -1,9 +1,9 @@
 import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import './globals.css'
 import { Providers } from './providers'
+import { Playpen_Sans } from 'next/font/google'
 
-const inter = Inter({ subsets: ['latin'] })
+const playpenSans = Playpen_Sans({weight: "400", subsets: ['latin']})
 
 export const metadata: Metadata = {
   title: 'Boutique Belen | Home',
@@ -27,7 +27,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={inter.className}>
+      <body className={playpenSans.className}>
         <Providers>
           {children}
         </Providers>

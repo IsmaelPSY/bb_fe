@@ -1,5 +1,4 @@
-import CProductFilter from "@/components/CProductFilter"
-import { Heading } from "@chakra-ui/react"
+import { Grid, Heading } from "@chakra-ui/react"
 
 export default function HomeLayout({
   children
@@ -8,14 +7,15 @@ export default function HomeLayout({
 }) {
   return(
     <div className='container mx-auto bg-sky-500'>
-      <div className='bg-red-100 mb-2 rounded-b-md'>
-        <Heading as='h1' size={['xl', '2xl']} className='text-center h-min p-2'>
-          Bienvenid@ a Boutique Belen
+        <Heading 
+          as='h1' 
+          size={['md', '2xl']} 
+          className='text-center h-min p-2 bg-pink-200 mb-2 rounded-b-md'
+          fontFamily="appFont"
+        >
+          Boutique Belen
         </Heading>
-      </div>
-      <div className='bg-red-100 mb-2 rounded-md'>
-        <CProductFilter />
-      </div>
+        {/* <CProductFilter /> */}
       <main className='bg-gray-200 min-h-[calc(100vh-50px)] rounded-md p-2'>
         { children} 
       </main>

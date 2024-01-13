@@ -14,7 +14,6 @@ import {
   Grid,
   HStack,
   Heading,
-  Image,
   Modal,
   ModalBody,
   ModalContent,
@@ -26,6 +25,8 @@ import {
 
 import { useState } from "react"
 import CProductTag from "./CProductTag"
+import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "./ui/carousel"
+import Image from "next/image"
 
 
 export default function CProductCard ({ product }: {product: IProduct}) {
@@ -34,10 +35,13 @@ export default function CProductCard ({ product }: {product: IProduct}) {
 
   return(
     <>
-      <Card onClick={() => setIsOpen(true)} className="cursor-pointer">
+      <Card 
+        onClick={() => setIsOpen(true)} 
+        className="cursor-pointer hover:shadow-2xl shadow-blue-800"
+      >
         <CardHeader p={2}>
           <Grid templateColumns='repeat(2, auto)' alignItems="center">
-            <Heading size={['sm', 'md']}>{product.title}</Heading>
+            <Heading as="h6" fontFamily="appFont" size={['sm', 'md']}>{product.title}</Heading>
             <Badge 
               variant="outline" 
               textAlign="center"
@@ -49,7 +53,14 @@ export default function CProductCard ({ product }: {product: IProduct}) {
           </Grid>
         </CardHeader>
         <CardBody p={2}>
-          <Image borderRadius="5" src={product.image_urls[0]} alt={product.title} />
+          <Image 
+            className="rounded-sm" 
+            src={product.image_urls[0]} 
+            alt={product.title} 
+            width={500}
+            height={500}
+            priority={true}
+          />
         </CardBody>
         <CardFooter p={2}>
           <Text fontSize="sm">
@@ -58,17 +69,35 @@ export default function CProductCard ({ product }: {product: IProduct}) {
         </CardFooter>
       </Card>
 
-      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} size="xs">
+      <Modal isOpen={isOpen} onClose={() => setIsOpen(false)} size={["xs", "md"]}>
         <ModalOverlay />
         <ModalContent>
           <ModalHeader>
             <div className="flex items-center justify-between">
-              <Heading size={['md', 'md']}>{product.title}</Heading>
+              <Heading as="h6" fontFamily="appFont" size={['md', 'md']}>{product.title}</Heading>
               <Button onClick={() => setIsOpen(false)} size="sm">Cerrar</Button>
             </div>
           </ModalHeader>
           <ModalBody>
-            <Image borderRadius="5" src={product.image_urls[0]} alt={product.title} />
+            <Carousel>
+              <CarouselContent>
+                {
+                  product.image_urls.map(url => (
+                    <CarouselItem key={url} className="flex items-center justify-center">
+                      <Image 
+                        className="rounded-sm" 
+                        src={url} 
+                        alt={product.title} 
+                        width={500}
+                        height={500}
+                      />
+                    </CarouselItem>
+                  ))
+                }
+              </CarouselContent>
+              <CarouselPrevious />
+              <CarouselNext />
+            </Carousel>      
           </ModalBody>
           <ModalFooter>
             <Flex direction="column" gap="2">
