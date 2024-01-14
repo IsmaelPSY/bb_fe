@@ -14,22 +14,22 @@ interface Product {
   updatedAt: Date
 }
 
-async function loadProducts () {
-  const products = await getAllProducts()
-  return products;
-}
+// async function loadProducts () {
+//   const products = await getAllProducts()
+//   return products;
+// }
 
 export default async function Home() {
 
-  const products = await loadProducts()
+  // const products = await loadProducts()
   
   return (
     <Grid templateColumns={['repeat(2, 1fr)', 'repeat(3, 1fr)', 'repeat(4, 1fr)']} gap={[2,6]}>
-      {products.map((p: Product) =>
+      {/* {products.map((p: Product) =>
         <GridItem key={p._id}>
           <CProductCard product={p} />
         </GridItem>  
-      )}
+      )} */}
     </Grid>
   )
 }
