@@ -30,8 +30,7 @@ export async function PUT(req: Request, {params}: {params: {id: string}}) {
     const {id} = params;
     const body = await req.json()
   
-    const product = await Product.findByIdAndUpdate(id, body)
-  
+    const product = await Product.findByIdAndUpdate(id, body, {new: true})
     return NextResponse.json(product)
   
     } catch (error) {

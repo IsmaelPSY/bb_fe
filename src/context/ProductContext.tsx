@@ -50,8 +50,8 @@ export const ProductProvider = ({children} : {children: React.ReactNode}) => {
 
   const updateProduct = async (id: string, values: INewProduct) => {
     const res = await axios.put(`/api/products/${id}`, values)
-    axios.get("/api/revalidate")
     setProducts(products.map(product => product._id === id ? res.data : product))
+    axios.get("/api/revalidate")
   }
 
   return <ProductContext.Provider 

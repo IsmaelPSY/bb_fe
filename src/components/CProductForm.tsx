@@ -20,7 +20,7 @@ import { useProducts } from "@/context/ProductContext";
 import CUploadImageInput from "./CUploadImageInput";
 import { Box, Flex, Radio, RadioGroup, Select, Stack, Switch, Tag, TagLabel, useToast } from "@chakra-ui/react";
 
-import { ENewProductCategory, ENewProductGender, INewProduct } from "@/interfaces/IProduct";
+import { ENewProductCategory, ENewProductGender, ENewProductSize, INewProduct } from "@/interfaces/IProduct";
 
 
 const formSchema = z.object({
@@ -28,15 +28,13 @@ const formSchema = z.object({
     message: "Insertar un titulo menor a 100 caracteres",
   }).max(100),
   description: z.string().min(1, {
-    message: "Insertar una descripcion",
-  }).max(250, {
-    message: "Insertar una descripcion menor a 250 caracteres",
+    message: "Insertar una descripcion"
   }),
   image_urls: z.array(z.string()),
   category: z.enum(["s", "c", "a"]),
-  size: z.coerce.number(),
+  size: z.string(),
   gender: z.enum(["b", "g"]),
-  price: z.coerce.number(),
+  price: z.coerce.number().nonnegative(),
   available: z.coerce.boolean()
 })
 
@@ -64,13 +62,30 @@ const transformToProductCategory = (category: string): ENewProductCategory => {
   }
 }
 
+const transformToProductSize = (size: string): ENewProductSize => {
+  switch (size){
+    case '0':
+      return ENewProductSize.BABY0;
+    case '2':
+      return ENewProductSize.BABY2;
+    case '4':
+      return ENewProductSize.BABY4;
+    case '6':
+      return ENewProductSize.BABY6;
+    case '8':
+      return ENewProductSize.BABY8;
+    default:
+      throw new Error(`Invalid size value: ${size}`);
+  }
+}
+
 const transformToProduct = (values: z.infer<typeof formSchema>): INewProduct => {
   return {
     title: values.title,
     description: values.description,
     image_urls: values.image_urls,
     category: transformToProductCategory(values.category),
-    size: values.size,
+    size: values.size !== "no" ? transformToProductSize(values.size) : undefined,
     gender: transformToProductGender(values.gender),
     price: values.price,
     available: values.available
@@ -85,10 +100,9 @@ export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOp
       title: "",
       description: "",
       image_urls: [],
-      tags: [],
-      category: "c",
-      size: 0,
-      gender: "b",
+      category: "",
+      size: "no",
+      gender: "",
       price: 0,
       available: true
     },
@@ -102,7 +116,7 @@ export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOp
   function onSubmit(values: z.infer<typeof formSchema>) {
     try{
       if (initalData){
-        updateProduct(initalData.id, transformToProduct(values))
+        updateProduct(initalData._id, transformToProduct(values))
         toast({
           title: 'Producto actualizado',
           description: "El producto ha sido actualizado correctamente",
@@ -169,7 +183,7 @@ export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOp
             <FormItem>
               <FormLabel>Precio</FormLabel>
               <FormControl>
-                <Input placeholder="Precio" type="number" {...field} />
+                <Input placeholder="Precio" type="number" {...field} min={0}/>
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -207,6 +221,7 @@ export default function CProductForm ({setIsOpen, initalData}: {setIsOpen: (isOp
                   value={field.value}
                   onChange={(e) => field.onChange(e.target.value)}
                 >
+                  <option value="no">--</option>
                   <option value="0">0</option>
                   <option value="2">2</option>
                   <option value="4">4</option>

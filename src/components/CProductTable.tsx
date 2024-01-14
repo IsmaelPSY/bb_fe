@@ -30,14 +30,14 @@ export default function CProductTable () {
     try{
       deleteProduct(id)
       toast({
-        title: 'Etiqueta eliminada',
+        title: 'Producto eliminado',
         status: 'success',
         duration: 3000,
         isClosable: true,
       })
     } catch (error) {
       toast({
-        title: 'Error al eliminar la etiqueta',
+        title: 'Error al eliminar la producto',
         status:'error',
         duration: 2000,
         isClosable: true,
