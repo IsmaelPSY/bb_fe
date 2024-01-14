@@ -1,17 +1,16 @@
 import { NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
+import { mongooseConnect } from "@/lib/mongoose";
+import { Product } from "@/models/Product";
 
 export async function GET(req: Request, {params}: {params: {id: string}}) {
   try {
+    await mongooseConnect()
+
     const {id} = params;
 
-    const products = await prisma.product.findUnique({
-      where: {
-        id: Number(id)
-      }
-    })
+    const product = await Product.findById(id)
 
-    return NextResponse.json(products)
+    return NextResponse.json(product)
     
   } catch (error) {
     if (error instanceof Error) {
@@ -26,16 +25,12 @@ export async function GET(req: Request, {params}: {params: {id: string}}) {
 
 export async function PUT(req: Request, {params}: {params: {id: string}}) {
   try {
+    await mongooseConnect()
+
     const {id} = params;
     const body = await req.json()
   
-    const product = await prisma.product.update({
-      where: {
-        id: Number(id)
-      }
-      ,
-      data: body
-    })
+    const product = await Product.findByIdAndUpdate(id, body)
   
     return NextResponse.json(product)
   
@@ -52,13 +47,11 @@ export async function PUT(req: Request, {params}: {params: {id: string}}) {
 
 export async function DELETE(req: Request, {params}: {params: {id: string}}) {
  try {
+  await mongooseConnect()
+
   const {id} = params;
 
-  const product = await prisma.product.delete({
-    where: {
-      id: Number(id)
-    }
-  })
+  const product = await Product.findByIdAndDelete(id)
 
   return NextResponse.json(product)
 

@@ -9,14 +9,14 @@ export const ProductContext = createContext<{
   products: any[];
   loadProducts: () => Promise<void>;
   createProduct: (product: INewProduct) => Promise<void>;
-  deleteProduct: (id: number) => Promise<void>;
-  updateProduct: (id:number, product: INewProduct) => Promise<void>;
+  deleteProduct: (id: string) => Promise<void>;
+  updateProduct: (id:string, product: INewProduct) => Promise<void>;
 }>({
   products: [],
   loadProducts: async () => {},
   createProduct: async (product: INewProduct) => {},
-  deleteProduct: async (id: number) => {},
-  updateProduct: async (id:number, product: INewProduct) => {}
+  deleteProduct: async (id: string) => {},
+  updateProduct: async (id:string, product: INewProduct) => {}
 })
 
 export const useProducts = () => {
@@ -42,16 +42,16 @@ export const ProductProvider = ({children} : {children: React.ReactNode}) => {
     setProducts([...products, res.data])
   }
 
-  const deleteProduct = async (id: number) => {
+  const deleteProduct = async (id: string) => {
     await axios.delete(`/api/products/${id}`)
     axios.get("/api/revalidate")
-    setProducts(products.filter(product => product.id !== id))
+    setProducts(products.filter(product => product._id !== id))
   }
 
-  const updateProduct = async (id: number, values: INewProduct) => {
+  const updateProduct = async (id: string, values: INewProduct) => {
     const res = await axios.put(`/api/products/${id}`, values)
     axios.get("/api/revalidate")
-    setProducts(products.map(product => product.id === id ? res.data : product))
+    setProducts(products.map(product => product._id === id ? res.data : product))
   }
 
   return <ProductContext.Provider 

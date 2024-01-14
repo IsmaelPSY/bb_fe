@@ -12,13 +12,13 @@ export default function CProductTag(
     <>
       {
         type === "size"
-        ? <Tag colorScheme="purple"><TagLabel>Talla: {value}</TagLabel></Tag>
+        ? <Tag size="lg" colorScheme="purple"><TagLabel>Talla: {value}</TagLabel></Tag>
         : type === "gender"
-        ? <Tag colorScheme={value == "b" ? "twitter" : value == "g" ? "pink" : ""}>
+        ? <Tag size="lg" colorScheme={value == "b" ? "twitter" : value == "g" ? "pink" : ""}>
             <TagLabel>{value == "b" ? "Niño" : value == "g" ? "Niña" : ""}</TagLabel>
           </Tag>
         : type === "category"
-        ? <Tag colorScheme="teal">
+        ? <Tag size="lg" colorScheme="teal">
             <TagLabel>
               {
                 value == "c" 

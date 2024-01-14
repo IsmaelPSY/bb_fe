@@ -30,7 +30,6 @@ import Image from "next/image"
 
 
 export default function CProductCard ({ product }: {product: IProduct}) {
-
   const [isOpen, setIsOpen] = useState(false)
 
   return(
@@ -100,39 +99,41 @@ export default function CProductCard ({ product }: {product: IProduct}) {
             </Carousel>      
           </ModalBody>
           <ModalFooter>
-            <Flex direction="column" gap="2">
-              <Flex gap={2} align="center" alignItems="start">
+            <div className="w-full">
+              <Flex gap={2} align="center" alignItems="start" w="100%" justifyContent="space-between">
                 <Flex gap={2} wrap="wrap">
-                  {
-                    Number.isInteger(product.size)
-                    ? <CProductTag value={product.size} type="size"/>
-                    : null
-                  }
-                  {
-                    product.gender
-                  ? <CProductTag value={product.gender} type="gender"/>
-                    : null
-                  }
-                  {
-                    product.category
-                  ? <CProductTag value={product.category} type="category"/>
-                    : null
-                  }
-                </Flex>
-                <Badge 
-                  variant="outline" 
-                  p={1} 
-                  borderRadius="5"
-                  fontSize={['sm','md']}
-                >
-                  S/{product.price}
-                </Badge>
+                    {
+                      product.size
+                      ? <CProductTag value={product.size} type="size"/>
+                      : null
+                    }
+                    {
+                      product.gender
+                    ? <CProductTag value={product.gender} type="gender"/>
+                      : null
+                    }
+                    {
+                      product.category
+                    ? <CProductTag value={product.category} type="category"/>
+                      : null
+                    }
+                  </Flex>
+                  <Badge 
+                    variant="outline" 
+                    p={1} 
+                    borderRadius="5"
+                    fontSize={['sm','md']}
+                  >
+                    S/{product.price}
+                  </Badge>
               </Flex>
+
               <Divider orientation="horizontal"/>
+                
               <Text>
                 {product.description}
               </Text>
-            </Flex>
+            </div>
           </ModalFooter>
         </ModalContent>
       </Modal>

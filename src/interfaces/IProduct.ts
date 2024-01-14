@@ -1,10 +1,10 @@
 export interface IProduct {
-  id: number
+  _id: string
   title: string
   description?: string
   image_urls: string[]
   category?: string
-  size?: number
+  size?: string
   gender?: string
   price: number 
   available: boolean  
@@ -19,19 +19,19 @@ export interface INewProduct {
   description?: string
   image_urls: string[]
   category?: ENewProductCategory
-  size?: NewProductSize
+  size?: ENewProductSize
   gender?: ENewProductGender
   price: number 
   available: boolean  
 }
 
 
-enum NewProductSize {
-  BABY0 = 0,
-  BABY1 = 2,
-  BABY2 = 4,
-  BABY3 = 6,
-  BABY4 = 8
+export enum ENewProductSize {
+  BABY0 = "0",
+  BABY2 = "2",
+  BABY4 = "4",
+  BABY6 = "6",
+  BABY8 = "8"
 }
 
 export enum ENewProductGender {

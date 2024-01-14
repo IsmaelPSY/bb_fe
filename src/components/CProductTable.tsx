@@ -1,17 +1,5 @@
 "use client"
 
-interface Product {
-  id: number
-  title: string
-  description: string
-  image_urls: string[]
-  tags: string[]
-  price: number
-  available: boolean
-  createdAt: Date
-  updatedAt: Date
-}
-
 import { useProducts } from "@/context/ProductContext"
 import { Modal, ModalBody, ModalCloseButton, ModalContent, ModalHeader, ModalOverlay, Button, ButtonGroup, Table, TableContainer, Tbody, Td, Th, Thead, Tr, Tag, TagLabel, useToast, Popover, PopoverTrigger, Portal, PopoverContent, PopoverArrow, PopoverBody, Text, HStack, TagLeftIcon } from "@chakra-ui/react";
 import { useEffect, useState } from "react"
@@ -32,13 +20,13 @@ export default function CProductTable () {
     loadProducts()
   }, [])
 
-  const handleUpdateProduct = (id: number) => {
-    const product = products.find(product => product.id === id)
+  const handleUpdateProduct = (id: string) => {
+    const product = products.find(product => product._id === id)
     setProductToUpdate(product)
     setIsOpen(true)
   }
 
-  const handleDeleteProduct = (id: number) => {
+  const handleDeleteProduct = (id: string) => {
     try{
       deleteProduct(id)
       toast({
@@ -81,14 +69,14 @@ export default function CProductTable () {
             </Tr>
           </Thead>
           <Tbody>
-            {products.map((p: IProduct) => <Tr key={p.id}>
+            {products.map((p: IProduct) => <Tr key={p._id}>
               <Td>{p.title}</Td>
 
               <Td>{p.description}</Td>
               <Td>
                 <HStack>
                   {
-                    Number.isInteger(p.size)
+                    p.size
                     ? <CProductTag value={p.size} type="size"/>
                     : null
                   }
@@ -113,7 +101,7 @@ export default function CProductTable () {
               </Td>
               <Td>
                 <ButtonGroup gap="2">
-                  <Button size='sm' colorScheme="blue" onClick={() => handleUpdateProduct(p.id)}>Editar</Button>
+                  <Button size='sm' colorScheme="blue" onClick={() => handleUpdateProduct(p._id)}>Editar</Button>
                   <Popover>
                     <PopoverTrigger>
                       <Button size='sm' colorScheme="red">Eliminar</Button>
@@ -123,7 +111,7 @@ export default function CProductTable () {
                         <PopoverArrow />
                         <PopoverBody>
                           <Text fontSize="sm">Confirmar Eliminación</Text>
-                          <Button size='sm' colorScheme="red" onClick={()=> handleDeleteProduct(p.id)}>Eliminar</Button>
+                          <Button size='sm' colorScheme="red" onClick={()=> handleDeleteProduct(p._id)}>Eliminar</Button>
                         </PopoverBody>
                       </PopoverContent>
                     </Portal>
